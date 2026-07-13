@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fffaf0">
+    <meta name="description" content="Download the latest Taenggeu desktop companion pet for macOS or Windows.">
+    <meta property="og:title" content="Taenggeu">
+    <meta property="og:description" content="Desktop companion pet for macOS and Windows.">
+    <meta property="og:image" content="https://taenggeu.pages.dev/assets/taenggeu-icon.png">
+    <meta property="og:url" content="https://taenggeu.pages.dev">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="assets/taenggeu-icon.png">
+    <link rel="apple-touch-icon" href="assets/taenggeu-icon.png">
+    <title>Taenggeu</title>
+    <style>
+      @font-face {
+        font-family: "Press Start 2P";
+        src: url("assets/press-start-2p.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      :root {
+        --ink: #3d312b;
+        --paper: #fffaf0;
+        --cream: #fff1bf;
+        --yellow: #ffd468;
+        --yellow-deep: #f0bc42;
+        --white: #fffefb;
+        --radius: 20px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { background: var(--paper); }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "Press Start 2P", ui-monospace, monospace;
+      }
+
+      .download-page {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100svh;
+        text-align: center;
+      }
+
+      .download-page::before,
+      .download-page::after {
+        position: absolute;
+        z-index: -1;
+        width: 20px;
+        height: 20px;
+        content: "";
+        background: var(--yellow);
+      }
+
+      .download-page::before {
+        top: calc(50% - 225px);
+        left: calc(50% - 286px);
+        box-shadow: 20px 0 var(--yellow), 0 20px var(--yellow);
+      }
+
+      .download-page::after {
+        right: calc(50% - 278px);
+        bottom: calc(50% - 190px);
+        box-shadow: -20px 20px var(--yellow), 20px 20px var(--yellow);
+      }
+
+      .download-core {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: min(calc(100% - 40px), 510px);
+        transform: translate(-50%, -50%);
+      }
+
+      .app-icon-wrap {
+        display: inline-grid;
+        width: 132px;
+        height: 132px;
+        padding: 0;
+        place-items: center;
+        background: var(--paper);
+        border: 0;
+        border-radius: var(--radius);
+        box-shadow: none;
+        overflow: hidden;
+      }
+
+      .app-icon {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: var(--radius);
+        image-rendering: pixelated;
+      }
+
+      h1 {
+        margin: 30px 0 16px;
+        font-size: clamp(29px, 5vw, 43px);
+        line-height: 1.23;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin: 0 0 31px;
+        color: var(--ink);
+        font-size: 9px;
+        line-height: 1.65;
+      }
+
+      .download-menu {
+        position: relative;
+        width: min(100%, 270px);
+        margin: 0 auto;
+      }
+
+      .download-control {
+        display: grid;
+        grid-template-columns: 1fr 51px;
+        overflow: hidden;
+        background: var(--yellow);
+        border: 4px solid var(--ink);
+        border-radius: var(--radius);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .direct-download,
+      .download-toggle {
+        min-height: 53px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 16px;
+        color: var(--ink);
+        background: var(--yellow);
+        border: 0;
+        box-shadow: none;
+        font: 10px/1 "Press Start 2P", ui-monospace, monospace;
+        text-align: left;
+        text-decoration: none;
+        transition: transform 120ms steps(2, end), box-shadow 120ms steps(2, end), background 120ms steps(2, end);
+      }
+
+      .direct-download { justify-content: flex-start; }
+
+      .download-toggle {
+        padding: 0;
+        border-left: 4px solid var(--ink);
+        box-shadow: none;
+        cursor: pointer;
+      }
+
+      .direct-download:hover,
+      .direct-download:focus-visible,
+      .download-toggle:hover,
+      .download-toggle:focus-visible,
+      .download-menu[data-open="true"] .download-toggle {
+        background: var(--cream);
+        box-shadow: none;
+        transform: none;
+      }
+
+      .direct-download:focus-visible,
+      .download-toggle:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+      .caret {
+        width: 0;
+        height: 0;
+        border-top: 9px solid var(--ink);
+        border-right: 7px solid transparent;
+        border-left: 7px solid transparent;
+        transition: transform 120ms steps(2, end);
+      }
+
+      .download-menu[data-open="true"] .caret { transform: rotate(180deg); }
+
+      .menu-options {
+        position: absolute;
+        z-index: 2;
+        top: calc(100% + 10px);
+        right: 0;
+        left: 0;
+        display: none;
+        overflow: hidden;
+        background: var(--white);
+        border: 4px solid var(--ink);
+        border-radius: var(--radius);
+        box-shadow: 5px 5px 0 var(--yellow-deep);
+      }
+
+      .download-menu[data-open="true"] .menu-options { display: grid; }
+
+      .menu-option {
+        display: flex;
+        min-height: 50px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 13px;
+        color: var(--ink);
+        border-bottom: 3px solid var(--ink);
+        font-size: 9px;
+        line-height: 1.4;
+        text-align: left;
+        text-decoration: none;
+      }
+
+      .menu-option:last-child { border-bottom: 0; }
+
+      .menu-option:hover,
+      .menu-option:focus-visible { background: var(--cream); outline: none; }
+
+      .menu-option[data-recommended="true"]::after {
+        padding: 4px 6px;
+        content: "THIS DEVICE";
+        color: var(--white);
+        background: var(--ink);
+        font-size: 6px;
+        line-height: 1;
+      }
+
+      .footer {
+        position: absolute;
+        right: 50%;
+        bottom: 24px;
+        width: min(calc(100% - 40px), 520px);
+        margin: 0;
+        color: #80633f;
+        font-size: 7px;
+        line-height: 1.7;
+        text-align: center;
+        transform: translateX(50%);
+      }
+
+      @media (max-width: 480px) {
+        .download-core { width: min(calc(100% - 24px), 510px); }
+        .download-page::before { left: -68px; }
+        .download-page::after { right: -60px; }
+        .app-icon-wrap { width: 122px; height: 122px; }
+        h1 { margin: 27px 0 15px; font-size: 28px; }
+        .subtitle { margin-bottom: 29px; font-size: 8px; }
+        .footer { bottom: 17px; width: min(calc(100% - 28px), 520px); font-size: 6px; line-height: 1.65; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="download-page" data-screen-label="Taenggeu download">
+      <section class="download-core">
+        <div class="app-icon-wrap"><img class="app-icon" src="assets/taenggeu-icon.png" alt="Taenggeu app icon"></div>
+        <h1>TAENGGEU</h1>
+        <p class="subtitle">DESKTOP COMPANION PET · <span id="versionLabel">V0.2.0</span></p>
+        <div class="download-menu" id="downloadMenu">
+          <div class="download-control">
+            <a class="direct-download" id="directDownload" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg"><span id="downloadLabel">DOWNLOAD MACOS</span></a>
+            <button class="download-toggle" id="downloadToggle" type="button" aria-label="Choose a download" aria-expanded="false" aria-controls="downloadOptions"><span class="caret" aria-hidden="true"></span></button>
+          </div>
+          <nav class="menu-options" id="downloadOptions" aria-label="Download choices">
+            <a class="menu-option" data-platform="macos" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg">MACOS</a>
+            <a class="menu-option" data-platform="windows" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_x64-setup.exe">WINDOWS</a>
+          </nav>
+        </div>
+      </section>
+      <p class="footer">ALL RIGHTS BELONG TO SM ENTERTAINMENT. PERSONAL LEARNING AND USE ONLY.</p>
+    </main>
+    <script>
+      const menu = document.querySelector("#downloadMenu")
+      const toggle = document.querySelector("#downloadToggle")
+      const label = document.querySelector("#downloadLabel")
+      const directDownload = document.querySelector("#directDownload")
+      const versionLabel = document.querySelector("#versionLabel")
+      const fallbackRelease = {
+        version: "0.2.0",
+        downloads: {
+          macos: "https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg",
+          windows: "https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_x64-setup.exe",
+        },
+      }
+      const platformHint = String(navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase()
+      const recommendedPlatform = platformHint.includes("win") ? "windows" : platformHint.includes("mac") ? "macos" : null
+
+      const applyRelease = (release) => {
+        versionLabel.textContent = `V${release.version}`
+        menu.querySelector('[data-platform="macos"]').href = release.downloads.macos
+        menu.querySelector('[data-platform="windows"]').href = release.downloads.windows
+
+        if (recommendedPlatform) {
+          const option = menu.querySelector(`[data-platform="${recommendedPlatform}"]`)
+          option.dataset.recommended = "true"
+          label.textContent = `DOWNLOAD ${recommendedPlatform.toUpperCase()}`
+          directDownload.href = release.downloads[recommendedPlatform]
+        } else {
+          directDownload.href = release.downloads.macos
+        }
+      }
+
+      const loadLatestRelease = async () => {
+        try {
+          const response = await fetch("/api/latest", { cache: "no-store" })
+          if (!response.ok) throw new Error(`Latest release request failed: ${response.status}`)
+          const release = await response.json()
+          if (!/^\d+\.\d+\.\d+$/.test(release.version)) throw new Error("Invalid release version")
+          applyRelease(release)
+        } catch {
+          applyRelease(fallbackRelease)
+        }
+      }
+
+      loadLatestRelease()
+
+      const closeMenu = () => {
+        menu.dataset.open = "false"
+        toggle.setAttribute("aria-expanded", "false")
+      }
+
+      toggle.addEventListener("click", () => {
+        const isOpen = menu.dataset.open === "true"
+        menu.dataset.open = String(!isOpen)
+        toggle.setAttribute("aria-expanded", String(!isOpen))
+      })
+
+      document.addEventListener("click", (event) => {
+        if (!menu.contains(event.target)) closeMenu()
+      })
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeMenu()
+          toggle.focus()
+        }
+      })
+    </script>
+  </body>
+</html>
