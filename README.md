@@ -21,4 +21,6 @@ This repository is a zero-build static site configured for Cloudflare Pages.
 
 The `/api/latest` Pages Function reads the public updater metadata, resolves the
 current macOS and Windows installer assets, and caches the response for five minutes.
-The page links only to installer files and does not expose a GitHub Releases page link.
+The `/api/download` function resolves the version again when a download starts, so
+the initial button never falls back to an older hard-coded version. The page links
+only to installer files and does not expose a GitHub Releases page link.

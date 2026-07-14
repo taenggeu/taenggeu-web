@@ -259,15 +259,15 @@
       <section class="download-core">
         <div class="app-icon-wrap"><img class="app-icon" src="assets/taenggeu-icon.png" alt="Taenggeu app icon"></div>
         <h1>TAENGGEU</h1>
-        <p class="subtitle">DESKTOP COMPANION PET · <span id="versionLabel">V0.2.0</span></p>
+        <p class="subtitle">DESKTOP COMPANION PET · <span id="versionLabel">LATEST</span></p>
         <div class="download-menu" id="downloadMenu">
           <div class="download-control">
-            <a class="direct-download" id="directDownload" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg"><span id="downloadLabel">DOWNLOAD MACOS</span></a>
+            <a class="direct-download" id="directDownload" href="/api/download?platform=macos"><span id="downloadLabel">DOWNLOAD MACOS</span></a>
             <button class="download-toggle" id="downloadToggle" type="button" aria-label="Choose a download" aria-expanded="false" aria-controls="downloadOptions"><span class="caret" aria-hidden="true"></span></button>
           </div>
           <nav class="menu-options" id="downloadOptions" aria-label="Download choices">
-            <a class="menu-option" data-platform="macos" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg">MACOS</a>
-            <a class="menu-option" data-platform="windows" href="https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_x64-setup.exe">WINDOWS</a>
+            <a class="menu-option" data-platform="macos" href="/api/download?platform=macos">MACOS</a>
+            <a class="menu-option" data-platform="windows" href="/api/download?platform=windows">WINDOWS</a>
           </nav>
         </div>
       </section>
@@ -279,13 +279,6 @@
       const label = document.querySelector("#downloadLabel")
       const directDownload = document.querySelector("#directDownload")
       const versionLabel = document.querySelector("#versionLabel")
-      const fallbackRelease = {
-        version: "0.2.0",
-        downloads: {
-          macos: "https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_universal.dmg",
-          windows: "https://github.com/taenggeu/taenggeu-releases/releases/latest/download/Taenggeu_0.2.0_x64-setup.exe",
-        },
-      }
       const platformHint = String(navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase()
       const recommendedPlatform = platformHint.includes("win") ? "windows" : platformHint.includes("mac") ? "macos" : null
 
@@ -312,7 +305,7 @@
           if (!/^\d+\.\d+\.\d+$/.test(release.version)) throw new Error("Invalid release version")
           applyRelease(release)
         } catch {
-          applyRelease(fallbackRelease)
+          versionLabel.textContent = "LATEST"
         }
       }
 
